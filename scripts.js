@@ -2,29 +2,59 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Variables
   const cartItemsContainer = document.querySelector(".cart-items");
+  const carList = document.querySelector(".car-list");
   const totalPriceElement = document.getElementById("total-price");
+  const totalItemElement = document.getElementById("total-items");
   const checkoutButton = document.getElementById("checkout");
   const contactForm = document.getElementById("contact-form");
-  const sliderImage = document.getElementById("slider-image");
+  const slider = document.querySelector(".slider");
   let cartItems = [];
+
+  // collection of cars
+  let availableCars = [
+    { name: "Car Model 1", price: 20000, src: "cars/car1.jpg" },
+    { name: "Car Model 2", price: 25000, src: "cars/car2.jpg" },
+    { name: "Car Model 3", price: 20000, src: "cars/car3.jpg" },
+    { name: "Car Model 4", price: 25000, src: "cars/car4.jpg" },
+  ];
+
   let currentImageIndex = 0;
-
-  // List of images for the slider
-  const sliderImages = ["car1.jpg", "car2.jpg", "car3.jpg"];
-
   // Function to update the slider image
   function updateSliderImage() {
-    currentImageIndex = (currentImageIndex + 1) % sliderImages.length;
-    sliderImage.src = sliderImages[currentImageIndex];
-  }
+    currentImageIndex = (currentImageIndex + 1) % availableCars.length;
 
+    slider.innerHTML = ` <img id="slider-image" src="${availableCars[currentImageIndex].src}" alt="Featured ${availableCars[currentImageIndex].name}" />`;
+
+    slider.style.animation = "fade 2.5s infinite alternate";
+  }
+  updateSliderImage();
   // Change image every 5 seconds
   setInterval(updateSliderImage, 5000);
+
+  //render availablecars
+  renderAvailableCars();
+
+  //generate html
+  function renderAvailableCars() {
+    let carsHTML = "";
+    availableCars.forEach((car, index) => {
+      carsHTML += ` <div class="car-item">
+          <img src=${car.src} alt=Image of ${car.name} />
+          <h3>${car.name}</h3>
+          <p>Price: $${car.price}</p>
+          <button class="add-to-cart" data-id=${index} data-price=${car.price}>
+            Add to Cart
+          </button>
+        </div>`;
+    });
+    carList.innerHTML = carsHTML;
+  }
 
   // Function to update the cart total
   function updateCartTotal() {
     let total = cartItems.reduce((sum, item) => sum + item.price, 0);
     totalPriceElement.textContent = total.toFixed(2);
+    totalItemElement.textContent = cartItems.length;
   }
 
   // Function to render cart items
@@ -103,8 +133,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   // Variables
-  const reviews = document.querySelectorAll("#customer-reviews .review");
+  const reviews = document.querySelectorAll(".review");
   let currentReviewIndex = 0;
+  console.log();
 
   // Function to show the next review
   function showNextReview() {
@@ -118,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
   showNextReview();
 
   // Change review every 5 seconds
-  setInterval(showNextReview, 5000);
+  setInterval(showNextReview, 3000);
 
   // Event listener for comment form submission
   const commentForm = document.getElementById("comment-form");
